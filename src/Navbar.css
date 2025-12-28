@@ -1,0 +1,226 @@
+/* Custom button styling - removes default border and focus outline */
+.custom-hamburger-btn {
+  border: none !important;
+  box-shadow: none !important;
+  padding: 8px;
+  background: transparent;
+}
+
+.custom-hamburger-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Hamburger base styles */
+.hamburger {
+  display: inline-block;
+  cursor: pointer;
+  transition-timing-function: linear;
+  transition-duration: 0.15s;
+}
+
+.hamburger-box {
+  width: 30px;
+  height: 24px;
+  display: inline-block;
+  position: relative;
+}
+
+.hamburger-inner {
+  display: block;
+  top: 50%;
+  margin-top: -2px;
+}
+
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after {
+  width: 30px;
+  height: 4px;
+  background-color: #333;
+  border-radius: 4px;
+  position: absolute;
+  transition-property: transform;
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
+}
+
+.hamburger-inner::before,
+.hamburger-inner::after {
+  content: "";
+  display: block;
+}
+
+.hamburger-inner::before {
+  top: -10px;
+}
+
+.hamburger-inner::after {
+  bottom: -10px;
+}
+
+/* Spin animation to X */
+.hamburger--spin .hamburger-inner {
+  transition-duration: 0.22s;
+  transition-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.hamburger--spin .hamburger-inner::before {
+  transition: top 0.1s 0.25s ease-in, opacity 0.1s ease-in;
+}
+
+.hamburger--spin .hamburger-inner::after {
+  transition: bottom 0.1s 0.25s ease-in,
+    transform 0.22s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+/* Active state - when menu is open */
+.navbar-toggler[aria-expanded="true"] .hamburger--spin .hamburger-inner {
+  transform: rotate(225deg);
+  transition-delay: 0.12s;
+  transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.navbar-toggler[aria-expanded="true"]
+  .hamburger--spin
+  .hamburger-inner::before {
+  top: 0;
+  opacity: 0;
+  transition: top 0.1s ease-out, opacity 0.1s 0.12s ease-out;
+}
+
+.navbar-toggler[aria-expanded="true"] .hamburger--spin .hamburger-inner::after {
+  bottom: 0;
+  transform: rotate(-90deg);
+  transition: bottom 0.1s ease-out,
+    transform 0.22s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+/* Existing styles remain above (hamburger, button, etc.) */
+
+/* Styling for navigation links */
+.custom-nav-link {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333 !important;
+  padding: 12px 20px !important;
+  margin: 4px 0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: block;
+  width: 100%;
+}
+
+/* Hover and active state */
+.custom-nav-link:hover,
+.custom-nav-link:active,
+.custom-nav-link:focus {
+  color: #f39c12 !important;
+  background-color: #fdf2e6; /* Light orange tint */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(243, 156, 18, 0.15);
+}
+
+/* Active page highlight (optional - add 'active' class via JS if needed) */
+.custom-nav-link.active {
+  color: #f39c12 !important;
+  background-color: #fdf2e6;
+  font-weight: 600;
+}
+
+/* Better spacing in mobile menu */
+@media (max-width: 991px) {
+  .navbar-nav {
+    padding: 20px 0;
+  }
+
+  .nav-item {
+    margin: 8px 16px;
+  }
+
+  .custom-nav-link {
+    font-size: 1.2rem;
+    padding: 16px 24px !important;
+    border-radius: 12px;
+  }
+}
+/* Existing hamburger and button styles remain unchanged... */
+
+/* Navigation link styling - full width on mobile */
+.custom-nav-link {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333 !important;
+  padding: 16px 24px !important;
+  margin: 4px 16px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+/* Hover / active effects */
+.custom-nav-link:hover,
+.custom-nav-link:active,
+.custom-nav-link:focus {
+  color: #f39c12 !important;
+  background-color: #fdf2e6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(243, 156, 18, 0.2);
+}
+
+/* Active page (optional) */
+.custom-nav-link.active {
+  color: #f39c12 !important;
+  background-color: #fdf2e6;
+  font-weight: 600;
+}
+
+/* Mobile-specific full-width menu */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    padding: 20px 0;
+  }
+
+  .navbar-nav {
+    width: 100%;
+    padding: 0 16px;
+  }
+
+  .nav-item {
+    width: 100%;
+    margin: 8px 0;
+  }
+
+  .custom-nav-link {
+    font-size: 1.25rem;
+    padding: 18px 30px !important;
+    margin: 0;
+    border-radius: 16px;
+    background-color: #f8f9fa;
+  }
+
+  .custom-nav-link:hover,
+  .custom-nav-link:active {
+    background-color: #fdf2e6;
+    transform: translateY(-3px);
+  }
+}
+
+/* Desktop view - keep links inline */
+@media (min-width: 992px) {
+  .custom-nav-link {
+    display: inline-block;
+    width: auto;
+    margin: 0 8px;
+    padding: 8px 16px !important;
+    font-size: 1rem;
+  }
+
+  .custom-nav-link:hover {
+    background-color: transparent;
+    color: #f39c12 !important;
+    transform: none;
+    box-shadow: none;
+  }
+}

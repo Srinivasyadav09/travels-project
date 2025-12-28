@@ -1,0 +1,450 @@
+import "./App.css";
+import "react-datepicker/dist/react-datepicker.css";
+import { useState, useEffect, useRef } from "react";
+
+// Hook to detect when element is in viewport
+const useInView = () => {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
+  return [ref, inView];
+};
+
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Carousel />
+      <Form />
+      <Card />
+      <AboutUs />
+    </>
+  );
+}
+
+function Navbar() {
+  return (
+    <>
+      <nav class="navbar navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            Offcanvas dark navbar
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasDarkNavbar"
+            aria-controls="offcanvasDarkNavbar"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="offcanvas offcanvas-end text-bg-dark"
+            tabindex="-1"
+            id="offcanvasDarkNavbar"
+            aria-labelledby="offcanvasDarkNavbarLabel"
+          >
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">
+                Dark offcanvas
+              </h5>
+              <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#">
+                    Home
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    Link
+                  </a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Dropdown
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-dark">
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        Action
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        Another action
+                      </a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider"></hr>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        Something else here
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <form class="d-flex mt-3" role="search">
+                <input
+                  class="form-control me-2"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                />
+                <button class="btn btn-success" type="submit">
+                  Search
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </>
+  );
+}
+
+function Carousel() {
+  return (
+    <>
+      <div
+        id="carouselExampleRide"
+        class="carousel slide d-md-none"
+        data-bs-ride="true"
+        style={{ marginTop: "56px" }}
+      >
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img
+              src="https://picsum.photos/id/317/200/100"
+              class="d-block w-100 img-fluid"
+              alt="..."
+            />
+          </div>
+          <div class="carousel-item">
+            <img
+              src="https://picsum.photos/id/235/200/100"
+              class="d-block w-100 img-fluid"
+              alt="..."
+            />
+          </div>
+          <div class="carousel-item">
+            <img
+              src="https://picsum.photos/id/234/200/100"
+              class="d-block w-100 img-fluid"
+              alt="..."
+            />
+          </div>
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleRide"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleRide"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </>
+  );
+}
+
+function Form() {
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  const dd = String(now.getDate()).padStart(2, "0");
+  const hh = String(now.getHours()).padStart(2, "0");
+  const min = String(now.getMinutes()).padStart(2, "0");
+
+  const minDate = `${yyyy}-${mm}-${dd}`;
+  const minTime = `${hh}:${min}`;
+
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+
+  // get today's date as string
+  const todayString = minDate;
+
+  return (
+    <form className="shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+      <h3 className="mb-4" style={{ fontSize: "clamp(18px, 5vw, 24px)" }}>
+        Book Your Ride
+      </h3>
+      <div className="mb-3">
+        <label className="form-label">Name</label>
+        <input type="text" className="form-control" placeholder="Full Name" />
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Phone</label>
+        <input type="tel" className="form-control" placeholder="Phone Number" />
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Pick Up Location</label>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Enter location"
+        />
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Drop Location</label>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Enter location"
+        />
+      </div>
+
+      <div className="row">
+        <div className="col-md-6 mb-3">
+          <label className="form-label">Cab Type</label>
+          <select className="form-control">
+            <option>Choose Cab</option>
+            <option>Economy</option>
+            <option>Premium</option>
+          </select>
+        </div>
+
+        <div className="col-md-6 mb-3">
+          <label className="form-label">Trip Type</label>
+          <select className="form-control">
+            <option>Choose Type</option>
+            <option>One Way</option>
+            <option>Round Trip</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col-md-6 mb-3">
+          <label className="form-label">Pick Up Date</label>
+          <input
+            type="date"
+            className="form-control"
+            min={minDate}
+            value={date}
+            onChange={(e) => {
+              setDate(e.target.value);
+              setTime("");
+            }}
+          />
+        </div>
+
+        <div className="col-md-6 mb-3">
+          <label className="form-label">Pick Up Time</label>
+          <input
+            type="time"
+            className="form-control"
+            value={time}
+            min={date === todayString ? minTime : undefined}
+            onChange={(e) => setTime(e.target.value)}
+            disabled={!date}
+          />
+        </div>
+      </div>
+      <button type="submit" className="theme-btn w-100">
+        Submit
+      </button>
+    </form>
+  );
+}
+
+function Card() {
+  const [imgRef, imgInView] = useInView();
+
+  return (
+    <>
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-6 mx-aut">
+            <div className="site-heading text-center">
+              <span className="site-title-tagline">OUR FLEETS</span>
+              <h2 className="site-title">Our Taxi Fleet For You</h2>
+              <div className="heading-divider"></div>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-6 col-lg-4">
+            <div
+              className="rate-item wow fadeInUp"
+              data-wow-duration=".25s"
+              style={{
+                visibility: "visible",
+                animationDelay: "0.25s",
+                animationName: "fadeInUp",
+              }}
+            >
+              <div className="rate-header">
+                <div className="rate-img">
+                  <img
+                    ref={imgRef}
+                    src="https://picsum.photos/id/317/200/100"
+                    alt="Maruti Ertiga Taxi"
+                    className={imgInView ? "fade-in-image" : ""}
+                  />
+                </div>
+              </div>
+              <div className="rate-header-content">
+                <h4>Maruti Ertiga</h4>
+                <p className="rate-duration">Safe Journey</p>
+              </div>
+              <div className="rate-content">
+                <div className="rate-icon">
+                  <img src="assets/img/icon/taxi-1.svg" alt="" />
+                </div>
+                <div className="rate-feature">
+                  <ul>
+                    <li>
+                      <i class="far fa-check-double"></i>
+                      <span className="feature-label">Rate Per KM:</span>
+                      <span className="feature-value">₹10/KM</span>
+                    </li>
+                    <li>
+                      <i class="far fa-check-double"></i>
+                      <span className="feature-label">Daily Running:</span>
+                      <span className="feature-value">300Kms</span>
+                    </li>
+                    <li>
+                      <i class="far fa-check-double"></i>
+                      <span className="feature-label">Toll:</span>
+                      <span className="feature-value">Extra</span>
+                    </li>
+                    <li>
+                      <i class="far fa-check-double"></i>
+                      <span className="feature-label">Parking:</span>
+                      <span className="feature-value">Extra</span>
+                    </li>
+                  </ul>
+                  <a href="tel:+916300445109" className="theme-btn">
+                    Book Now
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+function AboutUs() {
+  return (
+    <>
+      <div className="about-area pb-120 pt-10" id="aboutus">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-lg-6">
+              <div
+                className="about-left wow fadeInLeft"
+                data-wow-delay=".25s"
+                style={{
+                  visibility: "visible",
+                  animationDelay: "0.25s",
+                  animationName: "fadeInLeft",
+                }}
+              ></div>
+              <div className="about-img">
+                <img
+                  src="https://picsum.photos/id/234/200/100"
+                  alt="About Us Image"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-6">
+            <div
+              className="about-right wow fadeInRight"
+              data-wow-delay=".25s"
+              style={{
+                visibility: "visible",
+                animationDelay: "0.25s",
+                animationName: "fadeInRight",
+              }}
+            >
+              <div className="site-heading mb-3">
+                <span class="site-title-tagline justify-content-start">
+                  <i className="flaticon-drive"></i>
+                  "About Us"
+                </span>
+                <h2 className="site-title">
+                  " Your Reliable "<span>Travel Partner</span> Across Hyderabad
+                  & Telangana "
+                </h2>
+              </div>
+              <p className="about-text">
+                Welcome to Shambhavi Travels, your trusted destination for
+                safe, comfortable, and affordable taxi rides across major cities
+                in South and Central India. Whether you're exploring the historic
+                Charminar in Hyderabad, visiting Secunderabad, heading to
+                Warangal, or traveling to Karimnagar, we make every journey
+                memorable and hassle-free.
+              </p>
+              <br></br>
+              <h6>Who We Are</h6>
+              <p className="about-text">
+                At Shambhavi Travels, we’re more than just a cab provider —
+                we’re your travel companion on the road. With years of
+                experience in passenger transport and tourism, we have become
+                one of the most dependable taxi service providers in the region.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+export default App;
